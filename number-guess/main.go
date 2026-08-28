@@ -32,10 +32,15 @@ func clearTerminal() {
 	}
 }
 
-func printInstuctions() {
+func printHeader(attempts int, success int, error int) {
 	fmt.Println(" ================== ")
 	fmt.Println(" == NUMBER GUESS == ")
 	fmt.Println(" ================== ")
+	fmt.Printf("\n Attempts: %d", attempts)
+	fmt.Printf("\n Successes %d \n Errors %d \n", success, error)
+}
+
+func printInstuctions() {
 	fmt.Println(" This is a golang minigame  ")
 	fmt.Println(" Choose a number between 0 and 100 ")
 	fmt.Println(" ================== ")
@@ -82,8 +87,12 @@ func checkUserReponse(userResponse int) bool {
 func main() {
 	shouldPlayAgain := true
 
+	attempts, successes, errors := 0, 0, 0
+
 	for shouldPlayAgain {
 		clearTerminal()
+		printHeader(attempts, successes, errors)
+
 		printInstuctions()
 
 		response, error := getUserResponse()
@@ -94,5 +103,12 @@ func main() {
 
 		hadSuccess := checkUserReponse(response)
 		shouldPlayAgain = confirmRestart(hadSuccess)
+
+		attempts++
+		if hadSuccess {
+			successes++
+		} else {
+			errors++
+		}
 	}
 }
