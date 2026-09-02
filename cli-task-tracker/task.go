@@ -1,8 +1,6 @@
 package main
 
 import (
-	"slices"
-
 	"github.com/google/uuid"
 )
 
@@ -26,8 +24,12 @@ func (tl *TaskList) Add(description string) {
 func (tl *TaskList) Remove(description string) {
 	for idx, task := range tl.tasks {
 		if task.Description == description {
-			tl.tasks = slices.Delete(tl.tasks, idx-1, idx)
+			tl.tasks = append(tl.tasks[:idx], tl.tasks[idx+1:]...)
 			return
 		}
 	}
+}
+
+func NewTaskList() *TaskList {
+	return &TaskList{[]Task{}}
 }
