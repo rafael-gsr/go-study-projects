@@ -30,6 +30,15 @@ func (tl *TaskList) Remove(description string) {
 	}
 }
 
+func (tl *TaskList) Update(oldDescription string, newDescription string) {
+	for idx, task := range tl.tasks {
+		if task.Description == oldDescription {
+			tl.tasks[idx].Description = newDescription
+			return
+		}
+	}
+}
+
 func NewTaskList() *TaskList {
 	return &TaskList{[]Task{}}
 }

@@ -73,3 +73,16 @@ func TestTaskListRemoveMethod(t *testing.T) {
 		t.Errorf("The Remove method is not working properly \n Description count: %d \n anotherDescription count: %d \n", countDescriptionOcurrencies(taskList, description), countDescriptionOcurrencies(taskList, anotherDescription))
 	}
 }
+
+func TestTaskListUpdateMethod(t *testing.T) {
+	taskList := NewTaskList()
+
+	taskList.Add(description)
+	taskList.Update(description, anotherDescription)
+
+	isDescriptionUnchanged := countDescriptionOcurrencies(taskList, anotherDescription) == 0
+
+	if isDescriptionUnchanged {
+		t.Errorf("The Update method is not working properly \n Count: %d \n", countDescriptionOcurrencies(taskList, anotherDescription))
+	}
+}
