@@ -15,15 +15,15 @@ func NewFlags(persistence *Persistence, tasks *TaskList) *Flags {
 }
 
 func (f *Flags) Setup() {
-	addFlag := flag.String("add", nil, "--add \"[description]\" - creates an input")
-	updateFlag := flag.String("update", nil, "--add \"[old]:[new]\"  - updates an input")
+	addFlag := flag.String("add", "", "--add \"[description]\" - creates an input")
+	updateFlag := flag.String("update", "", "--add \"[old]:[new]\"  - updates an input")
 
-	if &addFlag != nil {
+	if *addFlag != "" {
 		// TODO
 		fmt.Println(&addFlag)
 	}
 
-	if &updateFlag != nil {
+	if *updateFlag != "" {
 		// TODO
 		fmt.Println(&updateFlag)
 	}
