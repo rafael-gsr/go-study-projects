@@ -1,4 +1,4 @@
-package main
+package task
 
 import (
 	"reflect"
@@ -11,7 +11,7 @@ var (
 )
 
 func TestNewTaskList(t *testing.T) {
-	taskList := NewTaskList()
+	taskList := NewTaskList([]byte{})
 	taskListInstance := &TaskList{}
 
 	if reflect.TypeOf(taskList) != reflect.TypeOf(taskListInstance) {
@@ -42,7 +42,7 @@ func countDescriptionOcurrencies(taskList *TaskList, description string) int {
 }
 
 func TestTaskListAddMethod(t *testing.T) {
-	taskList := NewTaskList()
+	taskList := NewTaskList([]byte{})
 
 	taskList.Add(description)
 	taskList.Add(description)
@@ -57,7 +57,7 @@ func TestTaskListAddMethod(t *testing.T) {
 }
 
 func TestTaskListRemoveMethod(t *testing.T) {
-	taskList := NewTaskList()
+	taskList := NewTaskList([]byte{})
 
 	taskList.Add(description)
 	taskList.Add(description)
@@ -75,7 +75,7 @@ func TestTaskListRemoveMethod(t *testing.T) {
 }
 
 func TestTaskListUpdateMethod(t *testing.T) {
-	taskList := NewTaskList()
+	taskList := NewTaskList([]byte{})
 
 	taskList.Add(description)
 	taskList.Update(description, anotherDescription)

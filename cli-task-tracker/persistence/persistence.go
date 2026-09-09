@@ -1,4 +1,4 @@
-package main
+package persitence
 
 import (
 	"encoding/json"

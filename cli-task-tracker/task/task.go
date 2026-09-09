@@ -1,6 +1,9 @@
-package main
+package task
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/google/uuid"
 )
 
@@ -39,6 +42,13 @@ func (tl *TaskList) Update(oldDescription string, newDescription string) {
 	}
 }
 
-func NewTaskList() *TaskList {
-	return &TaskList{[]Task{}}
+func NewTaskList(rawData []byte) *TaskList {
+	var tl TaskList
+	err := json.Unmarshal(rawData, tl)
+	if err != nil {
+		fmt.Println("Error to retrieve the stored data")
+		return &TaskList{[]Task{}}
+	}
+
+	return &tl
 }
