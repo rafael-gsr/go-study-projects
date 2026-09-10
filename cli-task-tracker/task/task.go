@@ -4,22 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 
+	globaltypes "cli-stack-tracker/globalTypes"
+
 	"github.com/google/uuid"
 )
 
-type Task struct {
-	ID          string `json:"id"`
-	Description string `json:"description"`
-	Status      string `json:"status"`
-}
-
 type TaskList struct {
-	tasks []Task
+	tasks []globaltypes.ITask
 }
 
 func (tl *TaskList) Add(description string) {
 	taskID := uuid.New()
-	newTask := Task{ID: taskID.String(), Description: description, Status: "Pending"}
+	newTask := globaltypes.ITask{ID: taskID.String(), Description: description, Status: "Pending"}
 
 	tl.tasks = append(tl.tasks, newTask)
 }
@@ -42,12 +38,16 @@ func (tl *TaskList) Update(oldDescription string, newDescription string) {
 	}
 }
 
+func (tl *TaskList) GetTasks() []globaltypes.ITask {
+	return tl.tasks
+}
+
 func NewTaskList(rawData []byte) *TaskList {
 	var tl TaskList
 	err := json.Unmarshal(rawData, tl)
 	if err != nil {
 		fmt.Println("Error to retrieve the stored data")
-		return &TaskList{[]Task{}}
+		return &TaskList{[]globaltypes.ITask{}}
 	}
 
 	return &tl

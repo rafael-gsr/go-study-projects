@@ -3,6 +3,8 @@ package task
 import (
 	"reflect"
 	"testing"
+
+	globaltypes "cli-stack-tracker/globalTypes"
 )
 
 var (
@@ -22,7 +24,7 @@ func TestNewTaskList(t *testing.T) {
 		t.Error("The internal task element is nil")
 	}
 
-	taskArrayInstance := []Task{}
+	taskArrayInstance := []globaltypes.ITask{}
 
 	if reflect.TypeOf(taskList.tasks) != reflect.TypeOf(taskArrayInstance) {
 		t.Error("Tasks types is incorrect")

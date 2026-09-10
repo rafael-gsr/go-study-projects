@@ -4,14 +4,16 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+
+	globaltypes "cli-stack-tracker/globalTypes"
 )
 
 type Flags struct {
-	persistence *Persistence
-	tasks       *TaskList
+	persistence globaltypes.IPersistence
+	tasks       globaltypes.ITaskList
 }
 
-func NewFlags(persistence *Persistence, tasks *TaskList) *Flags {
+func NewFlags(persistence globaltypes.IPersistence, tasks globaltypes.ITaskList) *Flags {
 	return &Flags{persistence, tasks}
 }
 
@@ -53,17 +55,17 @@ func (f *Flags) Setup() {
 
 func (f *Flags) add(description string) {
 	f.tasks.Add(description)
-	f.persistence.Write(*f.tasks)
+	f.persistence.Write(f.tasks.GetTasks())
 }
 
 func (f *Flags) update(id string, description string) {
 	f.tasks.Update(id, description)
-	f.persistence.Write(*f.tasks)
+	f.persistence.Write(f.tasks.GetTasks())
 }
 
 func (f *Flags) remove(id string) {
 	f.tasks.Remove(id)
-	f.persistence.Write(*f.tasks)
+	f.persistence.Write(f.tasks.GetTasks())
 }
 
 func (f *Flags) clean() {
@@ -71,7 +73,7 @@ func (f *Flags) clean() {
 }
 
 func (f *Flags) list() {
-	for _, task := range f.tasks.tasks {
+	for _, task := range f.tasks.GetTasks() {
 		fmt.Printf("ID: %s | Description: %s | Status: %s", task.ID, task.Description, task.Status)
 	}
 }

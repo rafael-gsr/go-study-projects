@@ -1,14 +1,15 @@
 package main
 
+import (
+	"cli-stack-tracker/flags"
+	persitence "cli-stack-tracker/persistence"
+	"cli-stack-tracker/task"
+)
+
 func main() {
-	persistence := NewPersistence("tasks.txt", "")
-
-	if persistence != nil {
-		panic("Error on creating persistence package")
-	}
-
+	persistence := persitence.NewPersistence("tasks.txt", "")
 	storedContent := persistence.Read()
-	tasks := NewTaskList(storedContent)
-	flags := NewFlags(persistence, tasks)
+	tasks := task.NewTaskList(storedContent)
+	flags := flags.NewFlags(persistence, tasks)
 	flags.Setup()
 }
