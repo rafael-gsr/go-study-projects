@@ -20,19 +20,37 @@ func (tl *TaskList) Add(description string) {
 	tl.tasks = append(tl.tasks, newTask)
 }
 
-func (tl *TaskList) Remove(description string) {
+func (tl *TaskList) Remove(id string) {
 	for idx, task := range tl.tasks {
-		if task.Description == description {
+		if task.ID == id {
 			tl.tasks = append(tl.tasks[:idx], tl.tasks[idx+1:]...)
 			return
 		}
 	}
 }
 
-func (tl *TaskList) Update(oldDescription string, newDescription string) {
+func (tl *TaskList) Update(id string, newDescription string) {
 	for idx, task := range tl.tasks {
-		if task.Description == oldDescription {
+		if task.ID == id {
 			tl.tasks[idx].Description = newDescription
+			return
+		}
+	}
+}
+
+func (tl *TaskList) MarkAsDone(id string) {
+	for idx, task := range tl.tasks {
+		if task.ID == id {
+			tl.tasks[idx].Status = "Done"
+			return
+		}
+	}
+}
+
+func (tl *TaskList) MarkAsPenging(id string) {
+	for idx, task := range tl.tasks {
+		if task.ID == id {
+			tl.tasks[idx].Status = "Pending"
 			return
 		}
 	}
@@ -44,9 +62,9 @@ func (tl *TaskList) GetTasks() []globaltypes.ITask {
 
 func NewTaskList(rawData []byte) *TaskList {
 	var tl TaskList
-	err := json.Unmarshal(rawData, tl)
+	err := json.Unmarshal(rawData, &tl.tasks)
 	if err != nil {
-		fmt.Println("Error to retrieve the stored data")
+		fmt.Println("Error to retrieve the stored data", err)
 		return &TaskList{[]globaltypes.ITask{}}
 	}
 

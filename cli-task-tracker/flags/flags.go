@@ -22,6 +22,8 @@ func (f *Flags) Setup() {
 	updateFlag := flag.String("update", "", "--update \"[id]:[newDescription]\"  - updates an input")
 	cleanFlag := flag.String("clean", "", "--clean - cleans tasks")
 	removeFlag := flag.String("remove", "", "--remove [id] - remove task")
+	markAsDoneFlag := flag.String("done", "", "--done [id] - mark task as done")
+	markAsPendingFlag := flag.String("pending", "", "--pending [id] - mark task as pending")
 	listFlag := flag.Bool("list", false, "--list - list tasks")
 
 	flag.Parse()
@@ -51,6 +53,14 @@ func (f *Flags) Setup() {
 	if *listFlag {
 		f.list()
 	}
+
+	if *markAsDoneFlag != "" {
+		f.done(*markAsDoneFlag)
+	}
+
+	if *markAsPendingFlag != "" {
+		f.pending(*markAsPendingFlag)
+	}
 }
 
 func (f *Flags) add(description string) {
@@ -74,6 +84,16 @@ func (f *Flags) clean() {
 
 func (f *Flags) list() {
 	for _, task := range f.tasks.GetTasks() {
-		fmt.Printf("ID: %s | Description: %s | Status: %s", task.ID, task.Description, task.Status)
+		fmt.Printf("ID: %s | Description: %s | Status: %s\n", task.ID, task.Description, task.Status)
 	}
+}
+
+func (f *Flags) done(id string) {
+	f.tasks.MarkAsDone(id)
+	f.persistence.Write(f.tasks.GetTasks())
+}
+
+func (f *Flags) pending(id string) {
+	f.tasks.MarkAsPenging(id)
+	f.persistence.Write(f.tasks.GetTasks())
 }

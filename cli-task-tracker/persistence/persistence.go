@@ -2,12 +2,14 @@ package persitence
 
 import (
 	"encoding/json"
+	"fmt"
 	"path/filepath"
 )
 
 func errCheck(err error) {
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 }
 
@@ -20,6 +22,7 @@ type Persistence struct {
 func (p *Persistence) getCompletePath() string {
 	pwd, err := p.fileSystem.Getwd()
 	errCheck(err)
+
 	return filepath.Join(pwd, p.path, p.filename)
 }
 
