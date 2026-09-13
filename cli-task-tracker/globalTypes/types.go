@@ -1,4 +1,4 @@
-// Package globaltypes contains the program types
+// Package contains the program types
 package globaltypes
 
 type ITask struct {
@@ -20,4 +20,15 @@ type IPersistence interface {
 	Write(data any)
 	Remove()
 	Read() []byte
+}
+
+type ISubcommands interface {
+	SetPersistence(p IPersistence)
+	persistence() *IPersistence
+
+	SetTasks(tl ITaskList)
+	tasks() *ITaskList
+
+	Command() string
+	Exec()
 }
