@@ -1,15 +1,20 @@
 package main
 
 import (
-	"cli-stack-tracker/flags"
-	persitence "cli-stack-tracker/persistence"
-	"cli-stack-tracker/task"
+	"cli-stack-tracker/internal/persistence"
+	"cli-stack-tracker/internal/subcommands"
+	"cli-stack-tracker/internal/task"
 )
 
 func main() {
-	persistence := persitence.NewPersistence("tasks.txt", "")
-	storedContent := persistence.Read()
-	tasks := task.NewTaskList(storedContent)
-	flags := flags.NewFlags(persistence, tasks)
-	flags.Setup()
+	pers := persistence.NewPersistence("tasks.json", "")
+	storedContent := pers.Read()
+
+	tasks, err := task.NewTaskList(storedContent)
+	if err != nil {
+		pers.Write([]string{})
+	}
+
+	subcmds := subcommands.NewSubcommandsParser(pers, tasks)
+	subcmds.Parse()
 }

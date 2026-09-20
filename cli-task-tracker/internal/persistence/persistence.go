@@ -1,9 +1,11 @@
-package persitence
+package persistence
 
 import (
 	"encoding/json"
 	"fmt"
 	"path/filepath"
+
+	"cli-stack-tracker/internal/globaltypes"
 )
 
 func errCheck(err error) {
@@ -16,7 +18,7 @@ func errCheck(err error) {
 type Persistence struct {
 	filename   string
 	path       string
-	fileSystem FileSystem
+	fileSystem globaltypes.IFileSystem
 }
 
 func (p *Persistence) getCompletePath() string {
@@ -27,14 +29,9 @@ func (p *Persistence) getCompletePath() string {
 }
 
 func (p *Persistence) Write(data any) {
-	f, err := p.fileSystem.Create(p.getCompletePath())
-	errCheck(err)
-	defer f.Close()
-
 	jsonData, err := json.Marshal(data)
 	errCheck(err)
-
-	f.WriteString(string(jsonData))
+	p.fileSystem.Write(p.getCompletePath(), string(jsonData))
 }
 
 func (p *Persistence) Remove() {
@@ -47,6 +44,10 @@ func (p *Persistence) Read() []byte {
 	errCheck(err)
 
 	return file
+}
+
+func (p *Persistence) ExtraInfo() (filename string, path string) {
+	return p.filename, p.path
 }
 
 func NewPersistence(filename string, path string) *Persistence {

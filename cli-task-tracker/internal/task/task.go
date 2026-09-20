@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	globaltypes "cli-stack-tracker/globalTypes"
+	"cli-stack-tracker/internal/globaltypes"
 
 	"github.com/google/uuid"
 )
@@ -47,7 +47,7 @@ func (tl *TaskList) MarkAsDone(id string) {
 	}
 }
 
-func (tl *TaskList) MarkAsPenging(id string) {
+func (tl *TaskList) MarkAsPending(id string) {
 	for idx, task := range tl.tasks {
 		if task.ID == id {
 			tl.tasks[idx].Status = "Pending"
@@ -60,13 +60,19 @@ func (tl *TaskList) GetTasks() []globaltypes.ITask {
 	return tl.tasks
 }
 
-func NewTaskList(rawData []byte) *TaskList {
+func NewTaskList(rawData []byte) (*TaskList, error) {
 	var tl TaskList
+	emptyList := &TaskList{[]globaltypes.ITask{}}
+
+	if len(rawData) == 0 {
+		return emptyList, nil
+	}
+
 	err := json.Unmarshal(rawData, &tl.tasks)
 	if err != nil {
 		fmt.Println("Error to retrieve the stored data", err)
-		return &TaskList{[]globaltypes.ITask{}}
+		return emptyList, err
 	}
 
-	return &tl
+	return &tl, nil
 }

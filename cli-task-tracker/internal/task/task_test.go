@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	globaltypes "cli-stack-tracker/globalTypes"
+	"cli-stack-tracker/internal/globaltypes"
 )
 
 var (
@@ -13,7 +13,8 @@ var (
 )
 
 func TestNewTaskList(t *testing.T) {
-	taskList := NewTaskList([]byte{})
+	taskList, _ := NewTaskList([]byte{})
+
 	taskListInstance := &TaskList{}
 
 	if reflect.TypeOf(taskList) != reflect.TypeOf(taskListInstance) {
@@ -44,7 +45,7 @@ func countDescriptionOcurrencies(taskList *TaskList, description string) int {
 }
 
 func TestTaskListAddMethod(t *testing.T) {
-	taskList := NewTaskList([]byte{})
+	taskList, _ := NewTaskList([]byte{})
 
 	taskList.Add(description)
 	taskList.Add(description)
@@ -59,7 +60,7 @@ func TestTaskListAddMethod(t *testing.T) {
 }
 
 func TestTaskListRemoveMethod(t *testing.T) {
-	taskList := NewTaskList([]byte{})
+	taskList, _ := NewTaskList([]byte{})
 
 	taskList.Add(description)
 	taskList.Add(description)
@@ -77,7 +78,7 @@ func TestTaskListRemoveMethod(t *testing.T) {
 }
 
 func TestTaskListUpdateMethod(t *testing.T) {
-	taskList := NewTaskList([]byte{})
+	taskList, _ := NewTaskList([]byte{})
 
 	taskList.Add(description)
 	taskList.Update(description, anotherDescription)
@@ -86,5 +87,12 @@ func TestTaskListUpdateMethod(t *testing.T) {
 
 	if isDescriptionUnchanged {
 		t.Errorf("The Update method is not working properly \n Count: %d \n", countDescriptionOcurrencies(taskList, anotherDescription))
+	}
+}
+
+func TestTaskListReceiveInvalidJson(t *testing.T) {
+	_, err := NewTaskList([]byte("{broken"))
+	if err == nil {
+		t.Error("The NewTaskList should reject invalid JSONs")
 	}
 }
