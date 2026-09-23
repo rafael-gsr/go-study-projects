@@ -66,8 +66,21 @@ func TestTaskListRemoveMethod(t *testing.T) {
 	taskList.Add(description)
 	taskList.Add(anotherDescription)
 
-	taskList.Remove(description)
-	taskList.Remove(anotherDescription)
+	var (
+		descriptionItemId        string
+		anotherDescriptionItemId string
+	)
+
+	for _, task := range taskList.GetTasks() {
+		if task.Description == description {
+			descriptionItemId = task.ID
+		} else if task.Description == anotherDescription {
+			anotherDescriptionItemId = task.ID
+		}
+	}
+
+	taskList.Remove(descriptionItemId)
+	taskList.Remove(anotherDescriptionItemId)
 
 	isDescriptionCountNotDecreasing := countDescriptionOcurrencies(taskList, description) != 1
 	isAnotherDescriptionCountNotDecreasing := countDescriptionOcurrencies(taskList, anotherDescription) != 0
@@ -81,7 +94,16 @@ func TestTaskListUpdateMethod(t *testing.T) {
 	taskList, _ := NewTaskList([]byte{})
 
 	taskList.Add(description)
-	taskList.Update(description, anotherDescription)
+
+	var itemId string
+
+	for _, task := range taskList.GetTasks() {
+		if task.Description == description {
+			itemId = task.ID
+		}
+	}
+
+	taskList.Update(itemId, anotherDescription)
 
 	isDescriptionUnchanged := countDescriptionOcurrencies(taskList, anotherDescription) == 0
 

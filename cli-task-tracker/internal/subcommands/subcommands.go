@@ -12,28 +12,10 @@ import (
 type SubcommandsParser struct {
 	persistence globaltypes.IPersistence
 	tasks       globaltypes.ITaskList
+	subMap      map[string]globaltypes.ISubcommands
 }
 
 func (s *SubcommandsParser) Parse() {
-	addCmd := &AddSubcommand{&s.persistence, &s.tasks}
-	clearCmd := &ClearSubcommand{&s.persistence, &s.tasks}
-	doneCmd := &DoneSubcommand{&s.persistence, &s.tasks}
-	listCmd := &ListSubcommand{&s.persistence, &s.tasks}
-
-	pendCmd := &PendingSubcommand{&s.persistence, &s.tasks}
-	remCmd := &RemoveSubcommand{&s.persistence, &s.tasks}
-	updCmd := &UpdateSubcommand{&s.persistence, &s.tasks}
-
-	subMap := map[string]globaltypes.ISubcommands{
-		addCmd.Command():   addCmd,
-		clearCmd.Command(): clearCmd,
-		doneCmd.Command():  doneCmd,
-		listCmd.Command():  listCmd,
-		pendCmd.Command():  pendCmd,
-		remCmd.Command():   remCmd,
-		updCmd.Command():   updCmd,
-	}
-
 	helpFlag := flag.Bool("h", false, "-h -- shows help")
 	if *helpFlag {
 		s.printHelper()
@@ -46,8 +28,11 @@ func (s *SubcommandsParser) Parse() {
 	}
 
 	userCommand := os.Args[1]
+	s.Execute(userCommand)
+}
 
-	if sub, valid := subMap[userCommand]; valid {
+func (s *SubcommandsParser) Execute(command string) {
+	if sub, valid := s.subMap[command]; valid {
 		sub.Exec()
 	} else {
 		fmt.Println("Invalid command")
@@ -76,5 +61,24 @@ func NewSubcommandsParser(
 	persistence globaltypes.IPersistence,
 	tasks globaltypes.ITaskList,
 ) *SubcommandsParser {
-	return &SubcommandsParser{persistence, tasks}
+	addCmd := &AddSubcommand{&persistence, &tasks}
+	clearCmd := &ClearSubcommand{&persistence, &tasks}
+	doneCmd := &DoneSubcommand{&persistence, &tasks}
+	listCmd := &ListSubcommand{&persistence, &tasks}
+
+	pendCmd := &PendingSubcommand{&persistence, &tasks}
+	remCmd := &RemoveSubcommand{&persistence, &tasks}
+	updCmd := &UpdateSubcommand{&persistence, &tasks}
+
+	subMap := map[string]globaltypes.ISubcommands{
+		addCmd.Command():   addCmd,
+		clearCmd.Command(): clearCmd,
+		doneCmd.Command():  doneCmd,
+		listCmd.Command():  listCmd,
+		pendCmd.Command():  pendCmd,
+		remCmd.Command():   remCmd,
+		updCmd.Command():   updCmd,
+	}
+
+	return &SubcommandsParser{persistence, tasks, subMap}
 }

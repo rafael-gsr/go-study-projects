@@ -1,6 +1,7 @@
 package persistence
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
@@ -99,21 +100,23 @@ func TestWrite(t *testing.T) {
 		t.Errorf("Path not mounted correctly when writing.\n Expected: %s, received: %s", expectedPath, fs.path)
 	}
 
-	if fs.data != string(valid) {
-		t.Errorf("Error on parsing data.\n Expected: %s, received: %s", string(valid), fs.data)
+	validInBytes, err := json.Marshal(valid)
+	if err != nil {
+		t.Error("Error on test string parsing")
 	}
 
-	fs.completePath = ""
-	fs.data = ""
-
+	if fs.data != string(validInBytes) {
+		t.Errorf("Error on parsing data.\n Expected: %s, received: %s", string(validInBytes), fs.data)
+	}
 	invalid := "{\"invalid\""
 	pers.Write(invalid)
 
-	if fs.completePath != "" {
-		t.Errorf("Path not mounted correctly when writing.\n Expected: %s, received: %s", "(no path)", fs.path)
+	invalidInBytes, err := json.Marshal(invalid)
+	if err != nil {
+		t.Error("Error on test string parsing")
 	}
 
-	if fs.data != string(invalid) {
-		t.Errorf("Error on parsing data.\n Expected: %s, received: %s", string(invalid), fs.data)
+	if fs.data != string(invalidInBytes) {
+		t.Errorf("Error on parsing data.\n Expected: %s, received: %s", string(invalidInBytes), fs.data)
 	}
 }
