@@ -42,7 +42,7 @@ func (ls *ListSubcommand) Exec() {
 
 	tasks := (*ls.tl).GetTasks()
 	for _, task := range tasks {
-		fmt.Printf("ID: %s | Description: %s | Status: %s\n", task.ID, task.Description, task.Status)
+		fmt.Printf("ID: %s | Description: %s | Status: %s\n", task.ID(), task.Description(), task.Status())
 	}
 
 	if *ExtraInfo {

@@ -9,20 +9,33 @@ import (
 	"github.com/google/uuid"
 )
 
+type Task struct {
+	Id   string `json:"id"`
+	Desc string `json:"description"`
+	Stat string `json:"status"`
+}
+
+func (t *Task) ID() string                        { return t.Id }
+func (t *Task) SetID(id string)                   { t.Id = id }
+func (t *Task) Description() string               { return t.Desc }
+func (t *Task) SetDescription(description string) { t.Desc = description }
+func (t *Task) Status() string                    { return t.Stat }
+func (t *Task) SetStatus(status string)           { t.Stat = status }
+
 type TaskList struct {
 	tasks []globaltypes.ITask
 }
 
 func (tl *TaskList) Add(description string) {
 	taskID := uuid.New()
-	newTask := globaltypes.ITask{ID: taskID.String(), Description: description, Status: "Pending"}
+	newTask := Task{taskID.String(), description, "Pending"}
 
-	tl.tasks = append(tl.tasks, newTask)
+	tl.tasks = append(tl.tasks, &newTask)
 }
 
 func (tl *TaskList) Remove(id string) {
 	for idx, task := range tl.tasks {
-		if task.ID == id {
+		if task.ID() == id {
 			tl.tasks = append(tl.tasks[:idx], tl.tasks[idx+1:]...)
 			return
 		}
@@ -31,8 +44,8 @@ func (tl *TaskList) Remove(id string) {
 
 func (tl *TaskList) Update(id string, newDescription string) {
 	for idx, task := range tl.tasks {
-		if task.ID == id {
-			tl.tasks[idx].Description = newDescription
+		if task.ID() == id {
+			tl.tasks[idx].SetDescription(newDescription)
 			return
 		}
 	}
@@ -40,8 +53,8 @@ func (tl *TaskList) Update(id string, newDescription string) {
 
 func (tl *TaskList) MarkAsDone(id string) {
 	for idx, task := range tl.tasks {
-		if task.ID == id {
-			tl.tasks[idx].Status = "Done"
+		if task.ID() == id {
+			tl.tasks[idx].SetStatus("Done")
 			return
 		}
 	}
@@ -49,8 +62,8 @@ func (tl *TaskList) MarkAsDone(id string) {
 
 func (tl *TaskList) MarkAsPending(id string) {
 	for idx, task := range tl.tasks {
-		if task.ID == id {
-			tl.tasks[idx].Status = "Pending"
+		if task.ID() == id {
+			tl.tasks[idx].SetStatus("Pending")
 			return
 		}
 	}

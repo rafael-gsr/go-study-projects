@@ -1,10 +1,15 @@
 // Package globaltypes contains the program types
 package globaltypes
 
-type ITask struct {
-	ID          string `json:"id"`
-	Description string `json:"description"`
-	Status      string `json:"status"`
+type ITask interface {
+	ID() string
+	SetID(id string)
+
+	Description() string
+	SetDescription(description string)
+
+	Status() string
+	SetStatus(status string)
 }
 
 type ITaskList interface {
@@ -33,10 +38,7 @@ type ISubcommands interface {
 
 type IFileSystem interface {
 	Write(path string, name string) error
-
 	RemoveAll(path string) error
-
 	Getwd() (dir string, err error)
-
 	ReadFile(completePath string) ([]byte, error)
 }

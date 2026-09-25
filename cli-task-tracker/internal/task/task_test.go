@@ -36,7 +36,7 @@ func countDescriptionOcurrencies(taskList *TaskList, description string) int {
 	countOfMatchDescriptions := 0
 
 	for _, task := range taskList.tasks {
-		if task.Description == description {
+		if task.Description() == description {
 			countOfMatchDescriptions++
 		}
 	}
@@ -72,10 +72,10 @@ func TestTaskListRemoveMethod(t *testing.T) {
 	)
 
 	for _, task := range taskList.GetTasks() {
-		if task.Description == description {
-			descriptionItemId = task.ID
-		} else if task.Description == anotherDescription {
-			anotherDescriptionItemId = task.ID
+		if task.Description() == description {
+			descriptionItemId = task.ID()
+		} else if task.Description() == anotherDescription {
+			anotherDescriptionItemId = task.ID()
 		}
 	}
 
@@ -98,8 +98,8 @@ func TestTaskListUpdateMethod(t *testing.T) {
 	var itemId string
 
 	for _, task := range taskList.GetTasks() {
-		if task.Description == description {
-			itemId = task.ID
+		if task.Description() == description {
+			itemId = task.ID()
 		}
 	}
 

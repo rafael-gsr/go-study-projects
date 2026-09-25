@@ -7,6 +7,19 @@ import (
 	"cli-stack-tracker/internal/globaltypes"
 )
 
+type TaskImp struct {
+	Id  string `json:"id"`
+	Des string `json:"description"`
+	Sts string `json:"status"`
+}
+
+func (t *TaskImp) ID() string                        { return t.Id }
+func (t *TaskImp) Description() string               { return t.Des }
+func (t *TaskImp) Status() string                    { return t.Sts }
+func (t *TaskImp) SetID(id string)                   { t.Id = id }
+func (t *TaskImp) SetDescription(description string) { t.Des = description }
+func (t *TaskImp) SetStatus(status string)           { t.Sts = status }
+
 type TaskListMock struct {
 	description    string
 	id             string
@@ -15,7 +28,7 @@ type TaskListMock struct {
 
 func (t *TaskListMock) GetTasks() []globaltypes.ITask {
 	return []globaltypes.ITask{
-		{"id", "description", "approved"},
+		&TaskImp{"id", "description", "approved"},
 	}
 }
 func (t *TaskListMock) Add(description string) { t.description = description }
