@@ -3,10 +3,10 @@ package service
 
 type AddressBookService struct{}
 
-func (s *AddressBookService) Pong() map[string]string {
+func (s *AddressBookService) Pong() (map[string]string, error) {
 	response := map[string]string{
 		"message": "pong",
 	}
 
-	return response
+	return response, nil
 }

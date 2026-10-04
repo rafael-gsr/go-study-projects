@@ -16,7 +16,10 @@ func (c *AddressBookController) SetService(service service.AddressBookService) {
 }
 
 func (c *AddressBookController) Pong(ginContext *gin.Context) {
-	serviceResponse := c.service.Pong()
+	serviceResponse, error := c.service.Pong()
+	if error != nil {
+		ginContext.JSON(500, gin.H{"message": "Internal on processing you request"})
+	}
 
 	ginContext.JSON(200, serviceResponse)
 }
