@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"fmt"
 
+	"address-book-api/internal/core/middleware"
 	"address-book-api/internal/infrastructure/env"
 	"address-book-api/pkg/route"
 
@@ -13,7 +14,10 @@ func BootstrapApplication() {
 	env.Load()
 
 	router := gin.Default()
-	route.Config(router)
+
+	middleware.SetupMiddlewares(router)
+	route.SetupRoutes(router)
+
 	address := fmt.Sprintf(":%s", env.PORT)
 
 	router.Run(address)

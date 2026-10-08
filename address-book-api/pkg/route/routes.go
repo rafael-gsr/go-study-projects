@@ -2,6 +2,6 @@ package route
 
 import "github.com/gin-gonic/gin"
 
-func Config(router *gin.Engine) {
+func SetupRoutes(router *gin.Engine) {
 	configAddressRoutes(router)
 }
