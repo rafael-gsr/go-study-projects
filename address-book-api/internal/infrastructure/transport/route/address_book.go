@@ -1,13 +1,13 @@
 package route
 
 import (
-	"address-book-api/pkg/factory"
+	"address-book-api/internal/infrastructure/transport/controller"
 
 	"github.com/gin-gonic/gin"
 )
 
-func configAddressRoutes(router *gin.Engine) {
-	controller := factory.AddressBookFactory()
+func SetupAddressRoutes(router *gin.Engine, controller *controller.AddressBookController) {
+	addressRoutesRouter := router.Group("/address-book")
 
-	router.GET("/ping", controller.Pong)
+	addressRoutesRouter.GET("/ping", controller.Pong)
 }

@@ -8,11 +8,7 @@ import (
 )
 
 type AddressBookController struct {
-	service service.AddressBookService
-}
-
-func (c *AddressBookController) SetService(service service.AddressBookService) {
-	c.service = service
+	service *service.AddressBookService
 }
 
 func (c *AddressBookController) Pong(ginContext *gin.Context) {
@@ -22,4 +18,8 @@ func (c *AddressBookController) Pong(ginContext *gin.Context) {
 	}
 
 	ginContext.JSON(200, serviceResponse)
+}
+
+func NewAddressBookController(service *service.AddressBookService) *AddressBookController {
+	return &AddressBookController{service}
 }

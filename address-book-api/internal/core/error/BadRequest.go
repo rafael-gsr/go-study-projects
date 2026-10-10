@@ -1,8 +1,8 @@
-package error
+package custom_errors
 
 import "errors"
 
-var BadRequestError *genericError = NewGenericError(
+var BadRequestError *GenericError = NewGenericError(
 	400,
 	errors.New("BadRequestError"),
 	"check your requisition, the server cannot handle it",

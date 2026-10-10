@@ -5,7 +5,7 @@ import (
 
 	"address-book-api/internal/core/middleware"
 	"address-book-api/internal/infrastructure/env"
-	"address-book-api/pkg/route"
+	"address-book-api/pkg/factory"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,9 +16,9 @@ func BootstrapApplication() {
 	router := gin.Default()
 
 	middleware.SetupMiddlewares(router)
-	route.SetupRoutes(router)
-
 	address := fmt.Sprintf(":%s", env.PORT)
+
+	factory.AddressBookFactory(router)
 
 	router.Run(address)
 }
